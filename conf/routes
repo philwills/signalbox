@@ -5,6 +5,8 @@
 # Home page
 GET     /                                   controllers.Application.index
 
+GET     /signalbox                          controllers.Github.list
+
 GET     /signalbox/auth                     controllers.Github.authenticate
 
 GET     /signalbox/github-oauth-callback    controllers.Github.callback
