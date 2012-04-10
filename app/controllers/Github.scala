@@ -6,7 +6,7 @@ import play.api.mvc._
 object Github extends Controller {
 
   val clientId = "1e6477b2d1ed022cee4b"
-  val secretKey = "xxxxx"
+  val secretKey = ""
   
   def list = Action { implicit request =>
     withGithubToken { token =>
@@ -44,7 +44,7 @@ object Github extends Controller {
     request.session.get("github_token") map { token =>
       block(token)
     } getOrElse {
-      Redirect("/signalbox/authenticate").withSession("return_uri" -> request.uri)
+      Redirect(routes.Github.authenticate).withSession("return_uri" -> request.uri)
     }
   }
 }
