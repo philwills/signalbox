@@ -2,11 +2,13 @@ package controllers
 
 import play.api.libs.ws.WS
 import play.api.mvc._
+import com.typesafe.config.ConfigFactory
 
 object Github extends Controller {
 
-  val clientId = "1e6477b2d1ed022cee4b"
-  val secretKey = ""
+  lazy val config = ConfigFactory.load();
+  lazy val clientId = config.getString("github.clientid")
+  lazy val secretKey = config.getString("github.secretkey")
   
   def list = Action { implicit request =>
     withGithubToken { token =>
@@ -57,3 +59,5 @@ object PairParser {
     } : _*)
   }
 }
+
+
