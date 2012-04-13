@@ -1,0 +1,6 @@
+@(repos: Seq[String])
+<ul>
+    @repos.map { repo =>
+        <li>@repo</li>
+    }
+</ul>
