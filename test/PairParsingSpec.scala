@@ -4,6 +4,7 @@ import org.specs2.mutable._
 
 import play.api.test._
 import play.api.test.Helpers._
+import github.PairParser
 
 class PairParsingSpec extends Specification {
   "The pair parser" should {

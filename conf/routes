@@ -2,14 +2,13 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-# Home page
-GET     /                                   controllers.Application.index
+GET     /                                   controllers.Signalbox.index
 
-GET     /signalbox                          controllers.Github.list
+GET     /signalbox                          controllers.Signalbox.index
 
-GET     /signalbox/auth                     controllers.Github.authenticate
+GET     /signalbox/auth                     github.Github.authenticate
 
-GET     /signalbox/github-oauth-callback    controllers.Github.callback
+GET     /signalbox/github-oauth-callback    github.Github.callback
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file                       controllers.Assets.at(path="/public", file)
