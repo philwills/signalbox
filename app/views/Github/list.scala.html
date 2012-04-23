@@ -1,6 +1,12 @@
-@(repos: Seq[String])
+@(repos: Seq[github.Repository])
 <ul>
     @repos.map { repo =>
-        <li>@repo</li>
+        <li>@repo.name
+            <ul>
+                @for(branch <- repo.branches) {
+                    <li>@branch.name</li>
+                }
+            </ul>
+        </li>
     }
 </ul>

@@ -8,7 +8,7 @@ object ApplicationBuild extends Build {
     val appVersion      = "1.0"
 
     val appDependencies = Seq(
-      "org.eclipse.jgit" % "org.eclipse.jgit" % "1.3.0.201202151440-r"
+      "net.liftweb" %% "lift-json" % "2.4"
     )
 
     val main = PlayProject(appName, appVersion, appDependencies, mainLang = SCALA).settings(
