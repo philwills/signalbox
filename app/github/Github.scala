@@ -9,11 +9,12 @@ import play.api.Configuration._
 import java.io.File
 import play.api.{Play, Configuration}
 import play.api.libs.concurrent.Promise
+import org.joda.time.DateTime
 
 object Github extends Controller {
   import Play.current
 
-  implicit val formats = DefaultFormats
+  implicit val formats = DefaultFormats + DateTimeSerializer()
 
   lazy val config = Play.configuration.getConfig("github").get
   lazy val githubConf = Configuration(ConfigFactory.parseFileAnySyntax(new File("/signalbox/github.conf")))
@@ -43,7 +44,7 @@ object Github extends Controller {
   
   def getFromAPI[T](path: String, params: (String, String)*)(action: JValue => T)(implicit token: AccessToken) = {
     WS.url("https://api.github.com/%s" format (path))
-      .withQueryString(params + "access_token" -> token.value).get(
+      .withQueryString(params :+ ("access_token" -> token.value): _*).get(
     ) map {
       response => {
         action(json.parse(response.body))
@@ -103,8 +104,18 @@ case class Repository(name: String, branches: Seq[Branch] = Nil) {
     }
   }
 }
-case class Branch(name: String, commits: Seq[Commit] = Nil)
-case class Commit(sha: String)
+case class Branch(name: String, commits: Seq[Commit] = Nil) {
+  def stale = commits.headOption map (_.before(DateTime.now.minusDays(1))) getOrElse (false)
+}
+case class Commit(sha: String, commit: CommitDetails) {
+  def before(date: DateTime) = commit.committer.before(date)
+}
+case class CommitDetails(committer: GitUser)
+case class GitUser(date: Option[DateTime], name: Option[String]) {
+  def before(time: DateTime) = {
+    date.getOrElse(DateTime.now).isBefore(time)
+  }
+}
 
 case class AccessToken(value: String)
 

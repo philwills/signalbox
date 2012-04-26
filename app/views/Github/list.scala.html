@@ -1,10 +1,15 @@
 @(repos: Seq[github.Repository])
+<style>
+    .stale {
+        color: #808080;
+    }
+</style>
 <ul>
     @repos.map { repo =>
         <li>@repo.name
             <ul>
                 @for(branch <- repo.branches) {
-                    <li>@branch.name</li>
+                    <li @if(branch.stale) { class="stale" }>@branch.name</li>
                 }
             </ul>
         </li>
